@@ -1,7 +1,6 @@
 const Tip = require('../models/Tip');
 const ApiKey = require('../models/ApiKey');
 const User = require('../models/User');
-const crypto = require('crypto');
 const logger = require('../middlewares/logger');
 const { generateReadableKey } = require('../utils/keyGenerator');
 const { Op } = require('sequelize');
@@ -128,17 +127,13 @@ exports.loginForm = (req, res) => {
 
 exports.login = (req, res, next) => {
   passport.authenticate('local', (err, user, info) => {
-    if (err) {
-      return next(err);
-    }
+    if (err) return next(err);
     if (!user) {
       req.flash('error', info.message);
       return res.redirect('/admin/login');
     }
     req.logIn(user, (err) => {
-      if (err) {
-        return next(err);
-      }
+      if (err) return next(err);
       return res.redirect('/admin');
     });
   })(req, res, next);
@@ -149,7 +144,7 @@ exports.logout = (req, res) => {
   res.redirect('/');
 };
 
-// Fonction pour révoquer les clés expirées (à exécuter périodiquement)
+// Fonction pour révoquer les clés expirées
 exports.revokeExpiredKeys = async () => {
   try {
     const expiredKeys = await ApiKey.findAll({

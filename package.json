@@ -1,29 +1,24 @@
 {
-  "name": "bet-predictor",
+  "name": "predicteur-app",
   "version": "1.0.0",
-  "description": "Site de prédictions football",
   "main": "app.js",
   "scripts": {
-    "start": "node app.js",
-    "dev": "nodemon app.js",
-    "init-db": "node init-db.js"
+    "start": "node app.js"
   },
   "dependencies": {
-    "axios": "^1.9.2",
     "bcryptjs": "^2.4.3",
-    "dotenv": "^16.4.1",
-    "ejs": "^3.1.10",
+    "dotenv": "^16.4.5",
+    "ejs": "^3.1.9",
     "express": "^4.19.2",
     "express-flash": "^0.0.2",
-    "express-rate-limit": "^7.1.3",
     "express-session": "^1.18.0",
     "helmet": "^7.1.0",
     "passport": "^0.7.0",
     "passport-local": "^1.0.0",
-    "sequelize": "^6.37.1",
+    "sequelize": "^6.37.3",
     "sqlite3": "^5.1.7"
   },
-  "devDependencies": {
-    "nodemon": "^3.1.0"
+  "engines": {
+    "node": ">=18.0.0"
   }
 }

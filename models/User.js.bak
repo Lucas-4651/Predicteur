@@ -10,17 +10,18 @@ const User = sequelize.define('User', {
   },
   password: {
     type: DataTypes.STRING,
-    allowNull: false,
-    set(value) {
-      const salt = bcrypt.genSaltSync(10);
-      const hash = bcrypt.hashSync(value, salt);
-      this.setDataValue('password', hash);
-    }
+    allowNull: false
   }
 });
 
+// Méthode pour valider le mot de passe
 User.prototype.validPassword = function(password) {
   return bcrypt.compareSync(password, this.password);
 };
+
+User.beforeCreate(async (user) => {
+  const salt = await bcrypt.genSalt(10);
+  user.password = await bcrypt.hash(user.password, salt);
+});
 
 module.exports = User;

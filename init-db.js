@@ -39,7 +39,7 @@ async function initializeDatabase() {
     const apiKeyCount = await ApiKey.count();
     if (apiKeyCount === 0) {
       const apiKey = await ApiKey.create({
-        key: 'Lucas2K24',
+        key: 'Lucas_production',
         owner: 'Admin'
       });
       console.log('🔑 Clé API par défaut créée:', apiKey.key);

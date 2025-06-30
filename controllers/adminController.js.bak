@@ -5,6 +5,7 @@ const crypto = require('crypto');
 const logger = require('../middlewares/logger');
 const { generateReadableKey } = require('../utils/keyGenerator');
 const { Op } = require('sequelize');
+const passport = require('passport');
 
 exports.dashboard = async (req, res) => {
   try {
@@ -127,18 +128,17 @@ exports.loginForm = (req, res) => {
 
 exports.login = (req, res, next) => {
   passport.authenticate('local', (err, user, info) => {
-    if (err) {
-      return next(err);
-    }
+    console.log("Résultat auth:", { err, user, info });
+
+    if (err) return next(err);
     if (!user) {
       req.flash('error', info.message);
       return res.redirect('/admin/login');
     }
     req.logIn(user, (err) => {
-      if (err) {
-        return next(err);
-      }
-      return res.redirect('/admin');
+      if (err) return next(err);
+      console.log("Connecté avec succès :", user.username);
+      return res.redirect('/admin/');
     });
   })(req, res, next);
 };

@@ -10,13 +10,14 @@ const User = sequelize.define('User', {
   },
   password: {
     type: DataTypes.STRING,
-    allowNull: false,
-    set(value) {
-      const salt = bcrypt.genSaltSync(10);
-      const hash = bcrypt.hashSync(value, salt);
-      this.setDataValue('password', hash);
-    }
+    allowNull: false
   }
+});
+
+// Hook pour hasher le mot de passe avant la création
+User.beforeCreate(async (user) => {
+  const salt = await bcrypt.genSalt(10);
+  user.password = await bcrypt.hash(user.password, salt);
 });
 
 // Méthode pour valider le mot de passe
