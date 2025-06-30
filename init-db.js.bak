@@ -1,0 +1,42 @@
+require('dotenv').config();
+const sequelize = require('./config/database');
+const User = require('./models/User');
+const Tip = require('./models/Tip');
+const ApiKey = require('./models/ApiKey');
+
+async function initializeDatabase() {
+  try {
+    // Synchroniser tous les modèles
+    await sequelize.sync({ force: true });
+    console.log('Tables créées avec succès');
+    
+    // Créer l'utilisateur admin
+    const admin = await User.create({
+      username: process.env.ADMIN_USERNAME,
+      password: process.env.ADMIN_PASSWORD
+    });
+    console.log('Admin créé:', admin.username);
+    
+    // Ajouter des astuces par défaut
+    const tips = await Tip.bulkCreate([
+      { content: "Consultez les statistiques des équipes avant de parier" },
+      { content: "Les matchs à domicile ont souvent un avantage significatif" },
+      { content: "Analysez les dernières performances plutôt que la saison complète" }
+    ]);
+    console.log(`${tips.length} astuces créées`);
+    
+    // Créer une clé API par défaut
+    const apiKey = await ApiKey.create({
+      key: 'default_key_12345',
+      owner: 'Admin'
+    });
+    console.log('Clé API par défaut créée:', apiKey.key);
+    
+    process.exit(0);
+  } catch (error) {
+    console.error('Erreur lors de l\'initialisation:', error);
+    process.exit(1);
+  }
+}
+
+initializeDatabase();
